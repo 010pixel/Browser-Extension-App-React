@@ -6,6 +6,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Item from './featues/Item/Item';
 import Home from './featues/Home/Home';
+import ActionPage from './featues/ActionPage/ActionPage';
 
 const theme = createTheme();
 
@@ -18,7 +19,8 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/item/:slug" element={<Item />} />
-					<Route path="/item/:slug/:action" element={<div>Action</div>} />
+					<Route path="/item/:slug/:action" element={<ActionPage />} />
+					<Route path="*" element={<div>Oops..</div>} />
 				</Routes>
 			</main>
 			<Footer />
