@@ -1,7 +1,33 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
+import EmojiPeople from '@mui/icons-material/EmojiPeople';
+import Search from '@mui/icons-material/Search';
+import MonetizationOn from '@mui/icons-material/MonetizationOn';
 import { BrowserExtension } from '../../interface/common';
 import { EXTENSION_ACTIONS } from '../../common/constants';
+
+export const notice = (
+	<div className="row">
+		<div className="col s12">
+			<div className="card z-depth-5">
+				<div className="card-content">
+					<div>
+						<EmojiPeople color="primary" />
+						Hello lovely folks,
+					</div>
+					<Divider
+						sx={{
+							marginY: 2,
+						}}
+					/>
+					In the latest update, you must have noticed that your search engine <Search color="primary" />
+					is changed. This is to sustatin the development of this extension and continue serving this extension for free{' '}
+					<MonetizationOn color="warning" />
+				</div>
+			</div>
+		</div>
+	</div>
+);
 
 export const installMsg = (item: BrowserExtension) => (
 	<>

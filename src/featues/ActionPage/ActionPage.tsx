@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, Card, CardContent } from '@mui/material';
 import { ReactFCC } from '../../interface/react';
 import { BrowserExtension } from '../../interface/common';
 import exntensions from '../../shared/data';
 import { extensionActions, EXTENSION_ACTIONS, GAEventsByAction } from '../../common/constants';
 import { trackPurchase } from '../../common/ga4';
-import { getActionMsg } from './constants';
+import { getActionMsg, notice } from './constants';
 
 interface ActionPageProps {}
 
@@ -43,6 +43,11 @@ const ActionPage: ReactFCC<ActionPageProps> = () => {
 
 	return (
 		<div data-testid="item-component">
+			{['google-meet-easy-mute', 'easy-mute-for-google-meet'].includes(item.slug) && (
+				<Card sx={{ maxWidth: 345, backgroundColor: 'beige' }} style={{ margin: '20px auto' }}>
+					<CardContent>{notice}</CardContent>
+				</Card>
+			)}
 			<Box
 				marginX={5}
 				marginY={5}
