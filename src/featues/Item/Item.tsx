@@ -27,13 +27,15 @@ const Item: ReactFCC<ItemProps> = () => {
 						alignItems="center"
 						textAlign="center"
 					>
-						<Avatar src={item?.logo} sx={{ width: 94, height: 94 }} />
-						<Typography variant="h2" fontWeight={600} color="inherit" mt={5}>
+						<Avatar src={item?.logo} sx={{ width: 94, height: 94, mt: 5 }} />
+						<Typography variant="h2" fontWeight={600} color="inherit" my={5}>
 							{item?.name}
 						</Typography>
-						<Typography variant="h6" fontWeight={400} color="inherit" mt={5}>
-							{item?.description}
-						</Typography>
+						{item?.description && (
+							<Typography variant="h6" fontWeight={400} color="inherit">
+								{item?.description}
+							</Typography>
+						)}
 					</Grid>
 				</Grid>
 			</Fade>
