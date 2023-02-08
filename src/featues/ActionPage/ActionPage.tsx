@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { ReactFCC } from '../../interface/react';
 import { BrowserExtension } from '../../interface/common';
 import exntensions from '../../shared/data';
-import { ACTIONS } from '../../common/constants';
+import { extensionActions, EXTENSION_ACTIONS, GAEventsByAction } from '../../common/constants';
+import { trackPurchase } from '../../common/ga4';
+import { getActionMsg } from './constants';
 
 interface ActionPageProps {}
 
@@ -13,51 +15,31 @@ const ActionPage: ReactFCC<ActionPageProps> = () => {
 	const { slug, action } = useParams();
 	const item = exntensions.find((e: BrowserExtension) => e.slug === slug) || null;
 	const version = searchParams.get('version');
+	const actionName = extensionActions[(action as string)?.toUpperCase() as EXTENSION_ACTIONS] || null;
+
+	useEffect(() => {
+		if (!item || !action) {
+			return;
+		}
+		document.title = `${item.name} - ${actionName}`;
+		const analyticsEventActions = GAEventsByAction[(action as string)?.toUpperCase() as EXTENSION_ACTIONS] || null;
+		trackPurchase({
+			appName: item.name,
+			appSlug: item.slug,
+			version,
+			analyticsEventActions,
+		});
+	}, [item, action, actionName, version]);
 
 	if (!item) {
 		return <div>Oops...</div>;
 	}
 
-	if (!action || !Object.values(ACTIONS).includes(action.toLocaleLowerCase() as ACTIONS)) {
+	if (!actionName) {
 		return <div>Oops...</div>;
 	}
 
-	const installMsg = (
-		<>
-			<Typography variant="h2" fontWeight={700}>
-				Thank you
-			</Typography>
-			<Typography variant="h5" fontWeight={300} marginY={2}>
-				For downloading <strong>{item.name}</strong>
-			</Typography>
-			<Typography variant="h3">😊</Typography>
-		</>
-	);
-	const updateMsg = (
-		<>
-			<Typography variant="h2" fontWeight={700}>
-				Thank you
-			</Typography>
-			<Typography variant="h5" fontWeight={300} marginY={2}>
-				<strong>{item.name}</strong> has been updated to {version ? `v${version}` : 'latest version'}
-			</Typography>
-			<Typography variant="h3">😊</Typography>
-		</>
-	);
-	const uninstallMsg = (
-		<>
-			<Typography variant="h2" fontWeight={700}>
-				So sad
-			</Typography>
-			<Typography variant="h5" fontWeight={300} marginY={2}>
-				to see you go
-			</Typography>
-			<Typography variant="h3">😢</Typography>
-		</>
-	);
-
-	// eslint-disable-next-line no-nested-ternary
-	const msg = action === ACTIONS.INSTALL ? installMsg : action === ACTIONS.UPDATE ? updateMsg : uninstallMsg;
+	const msg = getActionMsg((action as string)?.toLocaleUpperCase(), item, version as string) as any;
 
 	return (
 		<div data-testid="item-component">

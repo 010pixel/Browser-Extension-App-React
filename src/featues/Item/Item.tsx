@@ -1,15 +1,24 @@
-import React from 'react';
-import { Avatar, Fade, Grid, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Avatar, Fade, Grid, Typography } from '@mui/material';
 import { ReactFCC } from '../../interface/react';
 import { BrowserExtension } from '../../interface/common';
 import exntensions from '../../shared/data';
+import { trackPageView } from '../../common/ga4';
 
 interface ItemProps {}
 
 const Item: ReactFCC<ItemProps> = () => {
 	const { slug } = useParams();
 	const item = exntensions.find((e: BrowserExtension) => e.slug === slug) || null;
+
+	useEffect(() => {
+		if (!item) {
+			return;
+		}
+		document.title = `${item.name}`;
+		trackPageView();
+	}, [item]);
 
 	if (!item) {
 		return <div>Oops...</div>;
